@@ -1,18 +1,19 @@
-import boto3
 import json
 
-dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('Inventory')
+import boto3
+
+dynamodb = boto3.resource("dynamodb")
+table = dynamodb.Table("Inventory")
+
 
 def lambda_handler(event, context):
-    location_id = int(event['pathParameters']['id'])
+    location_id = int(event["pathParameters"]["id"])
 
     response = table.query(
-        IndexName='locatio',
-        KeyConditionExpression=boto3.dynamodb.conditions.Key('location_id').eq(location_id)
+        IndexName="locatio",
+        KeyConditionExpression=boto3.dynamodb.conditions.Key("location_id").eq(
+            location_id
+        ),
     )
 
-    return {
-        'statusCode': 200,
-        'body': json.dumps(response['Items'])
-    }
+    return {"statusCode": 200, "body": json.dumps(response["Items"])}
