@@ -1,0 +1,66 @@
+name: Deploy All
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Zip all lambdas
+        run: |
+          zip -r get_all_inventory_items.zip lambda/get_all_inventory_items
+          zip -r get_inventory_item.zip lambda/get_inventory_item
+          zip -r add_inventory_item.zip lambda/add_inventory_item
+          zip -r delete_inventory_item.zip lambda/delete_inventory_item
+          zip -r get_location_inventory_items.zip lambda/get_location_inventory_items
+
+      - name: Deploy get_all_inventory_items
+        uses: appleboy/lambda-action@v0.1.5
+        with:
+          function_name: get_all_inventory_items
+          zip_file: get_all_inventory_items.zip
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
+
+      - name: Deploy get_inventory_item
+        uses: appleboy/lambda-action@v0.1.5
+        with:
+          function_name: get_inventory_item
+          zip_file: get_inventory_item.zip
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
+
+      - name: Deploy add_inventory_item
+        uses: appleboy/lambda-action@v0.1.5
+        with:
+          function_name: add_inventory_item
+          zip_file: add_inventory_item.zip
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
+
+      - name: Deploy delete_inventory_item
+        uses: appleboy/lambda-action@v0.1.5
+        with:
+          function_name: delete_inventory_item
+          zip_file: delete_inventory_item.zip
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
+
+      - name: Deploy get_location_inventory_items
+        uses: appleboy/lambda-action@v0.1.5
+        with:
+          function_name: get_location_inventory_items
+          zip_file: get_location_inventory_items.zip
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
