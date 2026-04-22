@@ -12,6 +12,3 @@ def lambda_handler(event, context):
     table.put_item(Item=body)
 
     return {"statusCode": 200, "body": "Item added"}
-
-
-##
