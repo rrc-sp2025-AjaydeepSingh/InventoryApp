@@ -1,14 +1,21 @@
 import json
-
 import boto3
 
-dynamodb = boto3.resource("dynamodb")
-table = dynamodb.Table("Inventory")
-
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('Inventory')
 
 def lambda_handler(event, context):
-    item_id = event["pathParameters"]["id"]
 
-    response = table.get_item(Key={"item_id": item_id})
+    item_id = event.get("pathParameters", {}).get("id")
 
-    return {"statusCode": 200, "body": json.dumps(response.get("Item"))}
+    if not item_id:
+        return {"statusCode": 400, "body": "Missing id"}
+
+    response = table.get_item(
+        Key={"item_id": item_id}
+    )
+
+    return {
+        "statusCode": 200,
+        "body": json.dumps(response.get("Item", {}))
+    }
